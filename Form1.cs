@@ -33,7 +33,7 @@ namespace REcoSample
 
 			//Inicializo la gramática y todos sus componentes
 			Grammar grammar = CreateGrammarColors(null);
-			Grammar grammarNombres = CreateGrammarTest(null);
+			Grammar grammarNombres = CreateGrammarName(null);
 
 			//No cambiar, inicializando el recognizer
 			_recognizer.SetInputToDefaultAudioDevice();
@@ -133,7 +133,7 @@ namespace REcoSample
 			}
 
 
-			private Grammar CreateGrammarTest(params int[] info)
+			private Grammar CreateGrammarName(params int[] info)
 			{
 				//synth.Speak("Creando ahora la gramática");
 				Choices nameChoice = new Choices();
