@@ -55,14 +55,14 @@ namespace REcoSample
 		private void ActivarGramatica(Grammar grammar)
 		{
 			grammar.Enabled = true;
-			_recognizer.LoadGrammar(grammar);	
+			_recognizer.LoadGrammar(grammar);
 		}
 
 
 
 		void _recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
-			
+
 			//obtenemos un diccionario con los elementos semánticos
 			SemanticValue semantics = e.Result.Semantics;
 			string rawText = e.Result.Text;
@@ -71,11 +71,11 @@ namespace REcoSample
 
 			if (semantics.ContainsKey("nom"))
 			{
-				String text = "Hola señor " + semantics["nom"].Value +  " ¿Cómo estás?";
+				String text = "Hola señor " + semantics["nom"].Value + " ¿Cómo estás?";
 				synth.Speak(text);
-				Thread.Sleep(1000); 
-			} 
-			else if(semantics.ContainsKey("rgb"))
+				Thread.Sleep(1000);
+			}
+			else if (semantics.ContainsKey("rgb"))
 			{
 				this.label1.Text = rawText;
 				this.BackColor = Color.FromArgb((int)semantics["rgb"].Value);
@@ -83,99 +83,96 @@ namespace REcoSample
 				//synth.Speak(texto);
 				Update();
 				//synth.Speak(rawText);
-			} else {
-				synth.Speak("Illo, que no te entiendo"); 
+			}
+			else
+			{
+				synth.Speak("Illo, que no te entiendo");
+			}
 		}
 
 
-		private Grammar CreateGrammarColors(params int[] info)
-		{
-			//synth.Speak("Creando ahora la gramática");
-			Choices colorChoice = new Choices();
+			private Grammar CreateGrammarColors(params int[] info)
+			{
+				//synth.Speak("Creando ahora la gramática");
+				Choices colorChoice = new Choices();
 
 
-			SemanticResultValue choiceResultValue =
-					new SemanticResultValue("Rojo", Color.FromName("Red").ToArgb());
-			GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
-			colorChoice.Add(resultValueBuilder);
+				SemanticResultValue choiceResultValue =
+						new SemanticResultValue("Rojo", Color.FromName("Red").ToArgb());
+				GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
+				colorChoice.Add(resultValueBuilder);
 
-			choiceResultValue =
-				   new SemanticResultValue("Azul", Color.FromName("Blue").ToArgb());
-			resultValueBuilder = new GrammarBuilder(choiceResultValue);
-			colorChoice.Add(resultValueBuilder);
+				choiceResultValue =
+					   new SemanticResultValue("Azul", Color.FromName("Blue").ToArgb());
+				resultValueBuilder = new GrammarBuilder(choiceResultValue);
+				colorChoice.Add(resultValueBuilder);
 
-			choiceResultValue =
-				   new SemanticResultValue("Verde", Color.FromName("Green").ToArgb());
-			resultValueBuilder = new GrammarBuilder(choiceResultValue);
-			colorChoice.Add(resultValueBuilder);
+				choiceResultValue =
+					   new SemanticResultValue("Verde", Color.FromName("Green").ToArgb());
+				resultValueBuilder = new GrammarBuilder(choiceResultValue);
+				colorChoice.Add(resultValueBuilder);
 
-			SemanticResultKey choiceResultKey = new SemanticResultKey("rgb", colorChoice);
-			GrammarBuilder colors = new GrammarBuilder(choiceResultKey);
-
-
-			GrammarBuilder poner = "Poner";
-			GrammarBuilder cambiar = "Cambiar";
-			GrammarBuilder fondo = "Fondo";
-
-			Choices dos_alternativas = new Choices(poner, cambiar);
-			GrammarBuilder frase = new GrammarBuilder(dos_alternativas);
-			frase.Append(fondo);
-			frase.Append(colors);
-			Grammar grammar = new Grammar(frase);
-			grammar.Name = "Poner/Cambiar Colores";
-
-			//Grammar grammar = new Grammar("so.xml.txt");
-
-			return grammar;
+				SemanticResultKey choiceResultKey = new SemanticResultKey("rgb", colorChoice);
+				GrammarBuilder colors = new GrammarBuilder(choiceResultKey);
 
 
+				GrammarBuilder poner = "Poner";
+				GrammarBuilder cambiar = "Cambiar";
+				GrammarBuilder fondo = "Fondo";
 
+				Choices dos_alternativas = new Choices(poner, cambiar);
+				GrammarBuilder frase = new GrammarBuilder(dos_alternativas);
+				frase.Append(fondo);
+				frase.Append(colors);
+				Grammar grammar = new Grammar(frase);
+				grammar.Name = "Poner/Cambiar Colores";
+
+				//Grammar grammar = new Grammar("so.xml.txt");
+
+				return grammar;
+			}
+
+
+			private Grammar CreateGrammarTest(params int[] info)
+			{
+				//synth.Speak("Creando ahora la gramática");
+				Choices nameChoice = new Choices();
+
+
+				SemanticResultValue choiceResultValue =
+						new SemanticResultValue("Paco", "Francisco");
+				GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
+				nameChoice.Add(resultValueBuilder);
+
+				choiceResultValue =
+					   new SemanticResultValue("Pepe", "Jose");
+				resultValueBuilder = new GrammarBuilder(choiceResultValue);
+				nameChoice.Add(resultValueBuilder);
+
+				choiceResultValue =
+					   new SemanticResultValue("Rubén", "Ruqui");
+				resultValueBuilder = new GrammarBuilder(choiceResultValue);
+				nameChoice.Add(resultValueBuilder);
+
+				SemanticResultKey choiceResultKey = new SemanticResultKey("nom", nameChoice);
+				GrammarBuilder nombres = new GrammarBuilder(choiceResultKey);
+
+
+				GrammarBuilder poner = "mi nombre es ";
+				GrammarBuilder cambiar = "me llamo";
+
+
+				Choices dos_alternativas = new Choices(poner, cambiar);
+				GrammarBuilder frase = new GrammarBuilder(dos_alternativas);
+				frase.Append(nombres);
+				Grammar grammar = new Grammar(frase);
+				grammar.Name = "Poner/Cambiar Nombre";
+
+				//Grammar grammar = new Grammar("so.xml.txt");
+
+				return grammar;
+
+
+			}
 		}
-
-
-		private Grammar CreateGrammarTest(params int[] info)
-		{
-			//synth.Speak("Creando ahora la gramática");
-			Choices nameChoice = new Choices();
-
-
-			SemanticResultValue choiceResultValue =
-					new SemanticResultValue("Paco", "Francisco");
-			GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
-			nameChoice.Add(resultValueBuilder);
-
-			choiceResultValue =
-				   new SemanticResultValue("Pepe","Jose");
-			resultValueBuilder = new GrammarBuilder(choiceResultValue);
-			nameChoice.Add(resultValueBuilder);
-
-			choiceResultValue =
-				   new SemanticResultValue("Rubén", "Ruqui");
-			resultValueBuilder = new GrammarBuilder(choiceResultValue);
-			nameChoice.Add(resultValueBuilder);
-
-			SemanticResultKey choiceResultKey = new SemanticResultKey("nom", nameChoice);
-			GrammarBuilder nombres = new GrammarBuilder(choiceResultKey);
-
-
-			GrammarBuilder poner = "Poner";
-			GrammarBuilder cambiar = "Cambiar";
-			GrammarBuilder fondo = "Fondo";
-
-			Choices dos_alternativas = new Choices(poner, cambiar);
-			GrammarBuilder frase = new GrammarBuilder(dos_alternativas);
-			frase.Append(fondo);
-			frase.Append(nombres);
-			Grammar grammar = new Grammar(frase);
-			grammar.Name = "Poner/Cambiar Nombre";
-
-			//Grammar grammar = new Grammar("so.xml.txt");
-
-			return grammar;
-
-
-
-		}
-
 	}
-}
