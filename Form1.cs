@@ -39,7 +39,7 @@ namespace REcoSample
 			_recognizer.SetInputToDefaultAudioDevice();
 			_recognizer.UnloadAllGrammars();
 			// Nivel de confianza del reconocimiento 70%
-			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 50);
+			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 70);
 
 			//Activo la gramáticas creadas previamene.
 			ActivarGramatica(grammarNombres);
@@ -73,20 +73,24 @@ namespace REcoSample
 			{
 				String text = "Hola señor " + semantics["nom"].Value + " ¿Cómo estás?";
 				synth.Speak(text);
-				Thread.Sleep(1000);
+
+				this.pictureBox1.Visible = false; 
+				this.label1.Text = (String)semantics["nom"].Value;
 			}
 			else if (semantics.ContainsKey("rgb"))
 			{
 				this.label1.Text = rawText;
+				this.pictureBox1.Visible = true;
 				this.BackColor = Color.FromArgb((int)semantics["rgb"].Value);
 				String texto = "Estás cambiando el color, ten cuidao, has cambiao el color a: " + (int)semantics["rgb"].Value;
 				//synth.Speak(texto);
 				Update();
 				//synth.Speak(rawText);
 			}
+			//TODO hacer que entre en esto cuando el programa no te entiende. 
 			else
 			{
-				synth.Speak("Illo, que no te entiendo");
+				synth.Speak("No te he entendido claramente; ¿Podrías repetirlo?");
 			}
 		}
 
