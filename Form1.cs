@@ -83,12 +83,9 @@ namespace REcoSample
 				//synth.Speak(texto);
 				Update();
 				//synth.Speak(rawText);
-			}
-			else
-			{
+			} else {
 				synth.Speak("Illo, que no te entiendo");
 			}
-		}
 
 
 			private Grammar CreateGrammarColors(params int[] info)
@@ -130,6 +127,9 @@ namespace REcoSample
 				//Grammar grammar = new Grammar("so.xml.txt");
 
 				return grammar;
+
+
+
 			}
 
 
@@ -158,12 +158,13 @@ namespace REcoSample
 				GrammarBuilder nombres = new GrammarBuilder(choiceResultKey);
 
 
-				GrammarBuilder poner = "mi nombre es ";
-				GrammarBuilder cambiar = "me llamo";
-
+				GrammarBuilder poner = "Poner";
+				GrammarBuilder cambiar = "Cambiar";
+				GrammarBuilder fondo = "Fondo";
 
 				Choices dos_alternativas = new Choices(poner, cambiar);
 				GrammarBuilder frase = new GrammarBuilder(dos_alternativas);
+				frase.Append(fondo);
 				frase.Append(nombres);
 				Grammar grammar = new Grammar(frase);
 				grammar.Name = "Poner/Cambiar Nombre";
@@ -173,6 +174,9 @@ namespace REcoSample
 				return grammar;
 
 
+
 			}
+
 		}
 	}
+}
