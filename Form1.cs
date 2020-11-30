@@ -18,6 +18,11 @@ namespace REcoSample
 		   new SpeechRecognitionEngine();
 		private SpeechSynthesizer synth = new SpeechSynthesizer();
 
+
+		//Variables privadas para usar en las funciones // 
+		private Grammar grammarColors, grammarNombres;
+		private int state; //El estado del diálogo
+
 		public Form1()
 		{
 			//Esto pinta el formulario. 
@@ -27,36 +32,42 @@ namespace REcoSample
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			//Aquí se carga el formulario 1) 
-
-			synth.Speak("Bienvenido al diseño de interfaces avanzadas. Inicializando la Aplicación");
-
+			synth.Speak("Estimado ser humano. Has conseguido viajar en tiempo para salvar a la humanidad de la devastación total.");
 			//Inicializo la gramática y todos sus componentes
-			Grammar grammar = CreateGrammarColors(null);
-			Grammar grammarNombres = CreateGrammarName(null);
+			state = 0;
+			grammarColors = CreateGrammarColors(null);
+			grammarNombres = CreateGrammarName(null);
 
 			//No cambiar, inicializando el recognizer
 			_recognizer.SetInputToDefaultAudioDevice();
 			_recognizer.UnloadAllGrammars();
 			// Nivel de confianza del reconocimiento 70%
-			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 70);
+			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 60);
 
 			//Activo la gramáticas creadas previamene.
 			ActivarGramatica(grammarNombres);
-			ActivarGramatica(grammar);
+			ActivarGramatica(grammarColors);
 
 			//No cambiar, inicializando el recognizer
 			_recognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(_recognizer_SpeechRecognized);
 			//reconocimiento asíncrono y múltiples veces
 			_recognizer.RecognizeAsync(RecognizeMode.Multiple);
-			synth.Speak("Aplicación preparada para reconocer su voz");
+			synth.Speak("Ahora cuéntame; ¿Cómo te llamas?");
 		}
 
+		//Activa una gramática para ser usada
 		private void ActivarGramatica(Grammar grammar)
 		{
 			grammar.Enabled = true;
 			_recognizer.LoadGrammar(grammar);
 		}
+
+		//Desactiva una gramática para ser usada
+		private void DesactivarGramatica(Grammar grammar)
+        {
+			grammar.Enabled = false; 
+			_recognizer.UnloadGrammar(grammar); 
+        }
 
 
 
@@ -68,14 +79,13 @@ namespace REcoSample
 			string rawText = e.Result.Text;
 			RecognitionResult result = e.Result;
 
-
 			if (semantics.ContainsKey("nom"))
 			{
 				String text = "Hola señor " + semantics["nom"].Value + " ¿Cómo estás?";
 				synth.Speak(text);
-
-				this.pictureBox1.Visible = false; 
-				this.label1.Text = (String)semantics["nom"].Value;
+				DesactivarGramatica(grammarColors); 
+				this.pictureBox1.Visible = false;
+				this.label1.Text = (String)semantics["nom"].Value; 
 			}
 			else if (semantics.ContainsKey("rgb"))
 			{
@@ -99,7 +109,6 @@ namespace REcoSample
 			{
 				//synth.Speak("Creando ahora la gramática");
 				Choices colorChoice = new Choices();
-
 
 				SemanticResultValue choiceResultValue =
 						new SemanticResultValue("Rojo", Color.FromName("Red").ToArgb());
@@ -158,11 +167,18 @@ namespace REcoSample
 				resultValueBuilder = new GrammarBuilder(choiceResultValue);
 				nameChoice.Add(resultValueBuilder);
 
+
+				choiceResultValue =
+					   new SemanticResultValue("Claudia", "Mi querida loca del coño");
+				resultValueBuilder = new GrammarBuilder(choiceResultValue);
+				resultValueBuilder = new GrammarBuilder(choiceResultValue);
+				nameChoice.Add(resultValueBuilder);
+		
 				SemanticResultKey choiceResultKey = new SemanticResultKey("nom", nameChoice);
 				GrammarBuilder nombres = new GrammarBuilder(choiceResultKey);
 
 
-				GrammarBuilder poner = "mi nombre es ";
+				GrammarBuilder poner = "mi nombre es";
 				GrammarBuilder cambiar = "me llamo";
 
 
@@ -179,4 +195,9 @@ namespace REcoSample
 
 			}
 		}
+
+
+	//Todo añadir estados 
+
+
 	}
