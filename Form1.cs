@@ -19,6 +19,7 @@ namespace REcoSample
         
         public Form1()
         {
+           //Esto pinta el formulario. 
             InitializeComponent();
         }
 
