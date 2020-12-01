@@ -12,7 +12,7 @@ using System.Speech.Synthesis;
 
 namespace REcoSample
 {
-	public partial class Form1 : Form
+	public partial class Formulario_Rolplay : Form
 	{
 		private System.Speech.Recognition.SpeechRecognitionEngine _recognizer =
 		   new SpeechRecognitionEngine();
@@ -20,10 +20,10 @@ namespace REcoSample
 
 
 		//Variables privadas para usar en las funciones // 
-		private Grammar grammarColors, grammarNombres;
+		private Grammar grammarColors, grammarNombres, grammarYesNo;
 		private int state; //El estado del diálogo
 
-		public Form1()
+		public Formulario_Rolplay()
 		{
 			//Esto pinta el formulario. 
 			InitializeComponent();
@@ -33,26 +33,32 @@ namespace REcoSample
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			synth.Speak("Estimado ser humano. Has conseguido viajar en tiempo para salvar a la humanidad de la devastación total.");
-			//Inicializo la gramática y todos sus componentes
+			//Inicializo las gramática y todos sus componentes
+			
+			//Inicializo la variable global de estado
 			state = 0;
+
+			//Creo las gramáticas con las funciones para crearlas
 			grammarColors = CreateGrammarColors(null);
 			grammarNombres = CreateGrammarName(null);
+			grammarYesNo = CreateGrammarYesNo(null); 
 
 			//No cambiar, inicializando el recognizer
 			_recognizer.SetInputToDefaultAudioDevice();
 			_recognizer.UnloadAllGrammars();
-			// Nivel de confianza del reconocimiento 70%
+			// Nivel de confianza del reconocimiento 60%
 			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 60);
 
-			//Activo la gramáticas creadas previamene.
-			ActivarGramatica(grammarNombres);
-			ActivarGramatica(grammarColors);
+			//Activo la gramáticas creadas previamente.
+			//ActivarGramatica(grammarNombres);
+			//ActivarGramatica(grammarColors);
+			ActivarGramatica(grammarYesNo); 
 
 			//No cambiar, inicializando el recognizer
 			_recognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(_recognizer_SpeechRecognized);
 			//reconocimiento asíncrono y múltiples veces
 			_recognizer.RecognizeAsync(RecognizeMode.Multiple);
-			synth.Speak("Ahora cuéntame; ¿Cómo te llamas?");
+			synth.Speak("Ahora cuéntame; ¿Quieres participar en nuestra lucha?");
 		}
 
 		//Activa una gramática para ser usada
@@ -70,38 +76,47 @@ namespace REcoSample
         }
 
 
-
 		void _recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
 
 			//obtenemos un diccionario con los elementos semánticos
+			//Definimos las variables internas a usar en la función
 			SemanticValue semantics = e.Result.Semantics;
 			string rawText = e.Result.Text;
 			RecognitionResult result = e.Result;
+			string resultValue;
 
-			if (semantics.ContainsKey("nom"))
-			{
-				String text = "Hola señor " + semantics["nom"].Value + " ¿Cómo estás?";
-				synth.Speak(text);
-				DesactivarGramatica(grammarColors); 
-				this.pictureBox1.Visible = false;
-				this.label1.Text = (String)semantics["nom"].Value; 
-			}
-			else if (semantics.ContainsKey("rgb"))
-			{
-				this.label1.Text = rawText;
-				this.pictureBox1.Visible = true;
-				this.BackColor = Color.FromArgb((int)semantics["rgb"].Value);
-				String texto = "Estás cambiando el color, ten cuidao, has cambiao el color a: " + (int)semantics["rgb"].Value;
-				//synth.Speak(texto);
-				Update();
-				//synth.Speak(rawText);
-			}
-			//TODO hacer que entre en esto cuando el programa no te entiende. 
-			else
-			{
-				synth.Speak("No te he entendido claramente; ¿Podrías repetirlo?");
-			}
+			//Implementamos de forma "cutre" la máquina de estados
+            switch (state)
+            {
+				case 0:
+                    if (semantics.ContainsKey("yn"))
+                    {
+						resultValue = (String)semantics["yn"].Value;
+						synth.Speak("Has dicho: " + resultValue);
+						switch (resultValue)
+                        {
+							case "Si":
+								//Cambio el estado
+								this.state = 1;
+								//Desactivo la posibilidad de decir sí o no
+								DesactivarGramatica(grammarYesNo);
+								synth.Speak("Ahora dime tu nombre");
+								//Activo la posibilidad de decir el nombre
+								ActivarGramatica(grammarNombres);
+							break; 
+                        }
+                    }
+				break;
+				case 1:
+                    if (semantics.ContainsKey("nom"))
+                    {
+						resultValue = (String)semantics["nom"].Value;
+						synth.Speak("Encantado de conocerte, " + resultValue);
+						this.state = 0; 
+                    }
+					break; 
+            }
 		}
 
 
@@ -194,10 +209,34 @@ namespace REcoSample
 
 
 			}
+
+		private Grammar CreateGrammarYesNo(params int[] info)
+		{
+			Choices yes_noChoice = new Choices();
+			SemanticResultValue choiceResultValue =
+					new SemanticResultValue("Si", "Si");
+			GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			yes_noChoice.Add(resultValueBuilder);
+
+			choiceResultValue =
+				   new SemanticResultValue("No", "No");
+			resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			yes_noChoice.Add(resultValueBuilder);
+
+			SemanticResultKey choiceResultKey = new SemanticResultKey("yn", yes_noChoice);
+			GrammarBuilder si_no = new GrammarBuilder(choiceResultKey);
+		
+			Grammar grammar = new Grammar(si_no);
+			grammar.Name = "Decir sí / no";
+
+			return grammar;
 		}
+
+
+	}
 
 
 	//Todo añadir estados 
 
 
-	}
+}
