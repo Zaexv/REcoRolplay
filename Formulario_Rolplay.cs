@@ -19,29 +19,29 @@ namespace REcoSample
 		private SpeechSynthesizer synth = new SpeechSynthesizer();
 
 
-		//Variables privadas para usar en las funciones // 
+		//Variables privadas para usar en las funciones //
 		private Grammar grammarColors, grammarNombres, grammarYesNo;
-		private int state; //El estado del diálogo
+		private int state; //El estado del diï¿½logo
 
 		public Formulario_Rolplay()
 		{
-			//Esto pinta el formulario. 
+			//Esto pinta el formulario.
 			InitializeComponent();
 		}
 
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			synth.Speak("Estimado ser humano. Has conseguido viajar en tiempo para salvar a la humanidad de la devastación total.");
-			//Inicializo las gramática y todos sus componentes
-			
+			synth.Speak("Estimado ser humano. Has conseguido viajar en tiempo para salvar a la humanidad de la devastacion total.");
+			//Inicializo las gramï¿½tica y todos sus componentes
+
 			//Inicializo la variable global de estado
 			state = 0;
 
-			//Creo las gramáticas con las funciones para crearlas
+			//Creo las gramï¿½ticas con las funciones para crearlas
 			grammarColors = CreateGrammarColors(null);
 			grammarNombres = CreateGrammarName(null);
-			grammarYesNo = CreateGrammarYesNo(null); 
+			grammarYesNo = CreateGrammarYesNo(null);
 
 			//No cambiar, inicializando el recognizer
 			_recognizer.SetInputToDefaultAudioDevice();
@@ -49,44 +49,44 @@ namespace REcoSample
 			// Nivel de confianza del reconocimiento 60%
 			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 60);
 
-			//Activo la gramáticas creadas previamente.
+			//Activo la gramï¿½ticas creadas previamente.
 			//ActivarGramatica(grammarNombres);
 			//ActivarGramatica(grammarColors);
-			ActivarGramatica(grammarYesNo); 
+			ActivarGramatica(grammarYesNo);
 
 			//No cambiar, inicializando el recognizer
 			_recognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(_recognizer_SpeechRecognized);
-			//reconocimiento asíncrono y múltiples veces
+			//reconocimiento asï¿½ncrono y mï¿½ltiples veces
 			_recognizer.RecognizeAsync(RecognizeMode.Multiple);
-			synth.Speak("Ahora cuéntame; ¿Quieres participar en nuestra lucha?");
+			synth.Speak("Ahora cuentame; Â¿Quieres participar en nuestra lucha?");
 		}
 
-		//Activa una gramática para ser usada
+		//Activa una gramï¿½tica para ser usada
 		private void ActivarGramatica(Grammar grammar)
 		{
 			grammar.Enabled = true;
 			_recognizer.LoadGrammar(grammar);
 		}
 
-		//Desactiva una gramática para ser usada
+		//Desactiva una gramï¿½tica para ser usada
 		private void DesactivarGramatica(Grammar grammar)
         {
-			grammar.Enabled = false; 
-			_recognizer.UnloadGrammar(grammar); 
+			grammar.Enabled = false;
+			_recognizer.UnloadGrammar(grammar);
         }
 
 
 		void _recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
 
-			//obtenemos un diccionario con los elementos semánticos
-			//Definimos las variables internas a usar en la función
+			//obtenemos un diccionario con los elementos semï¿½nticos
+			//Definimos las variables internas a usar en la funciï¿½n
 			SemanticValue semantics = e.Result.Semantics;
 			string rawText = e.Result.Text;
 			RecognitionResult result = e.Result;
 			string resultValue;
 
-			//Implementamos de forma "cutre" la máquina de estados
+			//Implementamos de forma "cutre" la mï¿½quina de estados
             switch (state)
             {
 				case 0:
@@ -99,12 +99,17 @@ namespace REcoSample
 							case "Si":
 								//Cambio el estado
 								this.state = 1;
-								//Desactivo la posibilidad de decir sí o no
+								//Desactivo la posibilidad de decir sï¿½ o no
 								DesactivarGramatica(grammarYesNo);
 								synth.Speak("Ahora dime tu nombre");
 								//Activo la posibilidad de decir el nombre
 								ActivarGramatica(grammarNombres);
-							break; 
+							break;
+							case "No":
+								synth.Speak("Te voy a preguntar hasta que digas que sÃ­.");
+								synth.Speak("Eres el Ãºnico que puede salvarnos...");
+								synth.Speak("Y la persona mÃ¡s bella que conozco jeje");
+							break;
                         }
                     }
 				break;
@@ -113,16 +118,16 @@ namespace REcoSample
                     {
 						resultValue = (String)semantics["nom"].Value;
 						synth.Speak("Encantado de conocerte, " + resultValue);
-						this.state = 0; 
+						this.state = 0;
                     }
-					break; 
+				break;
             }
 		}
 
 
 			private Grammar CreateGrammarColors(params int[] info)
 			{
-				//synth.Speak("Creando ahora la gramática");
+				//synth.Speak("Creando ahora la gramï¿½tica");
 				Choices colorChoice = new Choices();
 
 				SemanticResultValue choiceResultValue =
@@ -163,7 +168,7 @@ namespace REcoSample
 
 			private Grammar CreateGrammarName(params int[] info)
 			{
-				//synth.Speak("Creando ahora la gramática");
+				//synth.Speak("Creando ahora la gramï¿½tica");
 				Choices nameChoice = new Choices();
 
 
@@ -178,17 +183,17 @@ namespace REcoSample
 				nameChoice.Add(resultValueBuilder);
 
 				choiceResultValue =
-					   new SemanticResultValue("Rubén", "Ruqui");
+					   new SemanticResultValue("Rubï¿½n", "Ruqui");
 				resultValueBuilder = new GrammarBuilder(choiceResultValue);
 				nameChoice.Add(resultValueBuilder);
 
 
 				choiceResultValue =
-					   new SemanticResultValue("Claudia", "Mi querida loca del coño");
+					   new SemanticResultValue("Claudia", "Mi querida loca del coï¿½o");
 				resultValueBuilder = new GrammarBuilder(choiceResultValue);
 				resultValueBuilder = new GrammarBuilder(choiceResultValue);
 				nameChoice.Add(resultValueBuilder);
-		
+
 				SemanticResultKey choiceResultKey = new SemanticResultKey("nom", nameChoice);
 				GrammarBuilder nombres = new GrammarBuilder(choiceResultKey);
 
@@ -225,9 +230,9 @@ namespace REcoSample
 
 			SemanticResultKey choiceResultKey = new SemanticResultKey("yn", yes_noChoice);
 			GrammarBuilder si_no = new GrammarBuilder(choiceResultKey);
-		
+
 			Grammar grammar = new Grammar(si_no);
-			grammar.Name = "Decir sí / no";
+			grammar.Name = "Decir sï¿½ / no";
 
 			return grammar;
 		}
@@ -236,7 +241,7 @@ namespace REcoSample
 	}
 
 
-	//Todo añadir estados 
+	//Todo aï¿½adir estados
 
 
 }
