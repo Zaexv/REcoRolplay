@@ -93,7 +93,7 @@ namespace REcoSample
                     if (semantics.ContainsKey("yn"))
                     {
 						resultValue = (String)semantics["yn"].Value;
-						synth.Speak("Has dicho: " + resultValue);
+						synth.Speak("Has dicho que " + resultValue + " ¿eh?");
 						switch (resultValue)
                         {
 							case "Si":
@@ -107,7 +107,7 @@ namespace REcoSample
 							break;
 							case "No":
 								synth.Speak("Te voy a preguntar hasta que digas que sí.");
-								synth.Speak("Eres el único que puede salvarnos...");
+								synth.Speak("Eres la única perosna que puede salvarnos...");
 								synth.Speak("Y la persona más bella que conozco jeje");
 							break;
                         }
@@ -116,9 +116,12 @@ namespace REcoSample
 				case 1:
                     if (semantics.ContainsKey("nom"))
                     {
+											//TODO aqui molaria mil que reconociese el nombre cualfuese
 						resultValue = (String)semantics["nom"].Value;
-						synth.Speak("Encantado de conocerte, " + resultValue);
-						this.state = 0;
+						synth.Speak("Estoy encantada de conocerte, " + resultValue);
+						DesactivarGramatica(grammarNombres);
+						synth.Speak("Ahora escoge un arma con la que salvar el mundo");
+						this.state = 2;
                     }
 				break;
             }
@@ -232,7 +235,7 @@ namespace REcoSample
 			GrammarBuilder si_no = new GrammarBuilder(choiceResultKey);
 
 			Grammar grammar = new Grammar(si_no);
-			grammar.Name = "Decir s� / no";
+			grammar.Name = "Decir si / no";
 
 			return grammar;
 		}
