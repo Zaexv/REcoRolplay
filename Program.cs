@@ -16,7 +16,7 @@ namespace REcoSample
             Application.SetCompatibleTextRenderingDefault(false);
             try
             {
-                Application.Run(new Form1());
+                Application.Run(new Formulario_Rolplay());
             }
             catch(Exception ex)
             {
