@@ -20,7 +20,7 @@ namespace REcoSample
 
 
 		//Variables privadas para usar en las funciones //
-		private Grammar grammarColors, grammarNombres, grammarYesNo;
+		private Grammar grammarColors, grammarNombres, grammarYesNo, grammarWeapons;
 		private int state; //El estado del dialogo
 
 		public Formulario_Rolplay()
@@ -47,6 +47,7 @@ namespace REcoSample
 			grammarColors = CreateGrammarColors(null);
 			grammarNombres = CreateGrammarName(null);
 			grammarYesNo = CreateGrammarYesNo(null);
+			grammarWeapons = CreateGrammarWeapons(null);
 
 
 			//No cambiar, inicializando el recognizer
@@ -56,6 +57,7 @@ namespace REcoSample
 			_recognizer.LoadGrammar(grammarColors);
 			_recognizer.LoadGrammar(grammarNombres);
 			_recognizer.LoadGrammar(grammarYesNo);
+			_recognizer.LoadGrammar(grammarWeapons);
 			// Nivel de confianza del reconocimiento 60%
 			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 60);
 
@@ -131,14 +133,64 @@ namespace REcoSample
 						DesactivarGramatica(grammarNombres);
 						synth.Speak("Ahora escoge un arma con la que salvar el mundo");
 						pictureBoxIA.Image = Properties.Resources.weapons;
+						ActivarGramatica(grammarWeapons);
 						this.state = 2;
                     }
 				break;
+				case 2:
+					if (semantics.ContainsKey("wea"))
+                    {
+						pictureBoxIA.Image = Properties.Resources.ia;
+						resultValue = (String)semantics["wea"].Value;
+						synth.Speak("Has elegido tu " + resultValue + " .");
+                    }
+				break; 
             }
 		}
 
 
-			private Grammar CreateGrammarColors(params int[] info)
+		private Grammar CreateGrammarWeapons(params int[] info)
+		{
+			//synth.Speak("Creando ahora la gram�tica");
+			Choices weaponChoice = new Choices();
+
+			SemanticResultValue choiceResultValue =
+					new SemanticResultValue("blaster", "blaster");
+			GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			weaponChoice.Add(resultValueBuilder);
+
+			choiceResultValue =
+				   new SemanticResultValue("francotirador", "francotirador");
+			resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			weaponChoice.Add(resultValueBuilder);
+
+			choiceResultValue =
+				   new SemanticResultValue("pistola", "pistola");
+			resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			weaponChoice.Add(resultValueBuilder);
+
+			SemanticResultKey choiceResultKey = new SemanticResultKey("wea", weaponChoice);
+			GrammarBuilder weapons = new GrammarBuilder(choiceResultKey);
+
+
+			GrammarBuilder seleccionar = "seleccionar";
+			GrammarBuilder escoger = "escoger";
+			GrammarBuilder coger = "coger";
+			GrammarBuilder elegir = "elegir";
+
+			Choices cuatro_alternativas = new Choices(elegir, seleccionar, escoger, coger);
+			GrammarBuilder frase = new GrammarBuilder(cuatro_alternativas);
+
+			frase.Append(cuatro_alternativas);
+			frase.Append(weapons);
+			Grammar grammar = new Grammar(frase);
+			grammar.Name = "Seleccionar Arma";
+
+			return grammar;
+		}
+
+
+		private Grammar CreateGrammarColors(params int[] info)
 			{
 				//synth.Speak("Creando ahora la gram�tica");
 				Choices colorChoice = new Choices();
