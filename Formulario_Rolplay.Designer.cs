@@ -28,44 +28,45 @@ namespace REcoSample
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Formulario_Rolplay));
             this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.pictureBoxIA = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIA)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(34, 76);
+            this.label1.Location = new System.Drawing.Point(68, 146);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 44);
+            this.label1.Size = new System.Drawing.Size(0, 85);
             this.label1.TabIndex = 0;
             // 
-            // pictureBox1
+            // pictureBoxIA
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1464, 737);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxIA.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBoxIA.Image = global::REcoSample.Properties.Resources.ia;
+            this.pictureBoxIA.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxIA.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBoxIA.Name = "pictureBoxIA";
+            this.pictureBoxIA.Size = new System.Drawing.Size(2564, 1417);
+            this.pictureBoxIA.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxIA.TabIndex = 1;
+            this.pictureBoxIA.TabStop = false;
             // 
-            // Form1
+            // Formulario_Rolplay
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1464, 737);
-            this.Controls.Add(this.pictureBox1);
+            this.ClientSize = new System.Drawing.Size(2564, 1417);
+            this.Controls.Add(this.pictureBoxIA);
             this.Controls.Add(this.label1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Margin = new System.Windows.Forms.Padding(6);
+            this.Name = "Formulario_Rolplay";
+            this.Text = "Minijuego de Rol";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIA)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -74,7 +75,7 @@ namespace REcoSample
         #endregion
 
         private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.PictureBox pictureBoxIA;
 	}
 }
 
