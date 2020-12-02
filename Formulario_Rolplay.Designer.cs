@@ -30,7 +30,9 @@ namespace REcoSample
         {
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBoxIA = new System.Windows.Forms.PictureBox();
+            this.pictureBoxGameOver = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIA)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGameOver)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -55,11 +57,25 @@ namespace REcoSample
             this.pictureBoxIA.TabIndex = 1;
             this.pictureBoxIA.TabStop = false;
             // 
+            // pictureBoxGameOver
+            // 
+            this.pictureBoxGameOver.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxGameOver.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBoxGameOver.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pictureBoxGameOver.Location = new System.Drawing.Point(729, 370);
+            this.pictureBoxGameOver.Name = "pictureBoxGameOver";
+            this.pictureBoxGameOver.Size = new System.Drawing.Size(1140, 739);
+            this.pictureBoxGameOver.TabIndex = 3;
+            this.pictureBoxGameOver.TabStop = false;
+            // 
             // Formulario_Rolplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2564, 1417);
+            this.Controls.Add(this.pictureBoxGameOver);
             this.Controls.Add(this.pictureBoxIA);
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(6);
@@ -67,6 +83,7 @@ namespace REcoSample
             this.Text = "Minijuego de Rol";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIA)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGameOver)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -76,6 +93,7 @@ namespace REcoSample
 
         private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.PictureBox pictureBoxIA;
-	}
+        private System.Windows.Forms.PictureBox pictureBoxGameOver;
+    }
 }
 
