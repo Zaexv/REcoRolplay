@@ -35,6 +35,7 @@ namespace REcoSample
 			//Inicializo este formulario
 			pictureBoxIA.Enabled = true;
 			pictureBoxGameOver.Visible = false;
+			pictureBoxGameOver.BackColor = Color.Transparent;
 			this.Enabled = true;
 
 			synth.Speak("Estimado ser humano. Has conseguido viajar a lo largo del tiempo para salvar a la humanidad de la devastacion total.");

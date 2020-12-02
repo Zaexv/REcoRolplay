@@ -93,7 +93,7 @@
     <None Include="Resources\weapons.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\gameover.jpg" />
+    <Content Include="Resources\gameover.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
