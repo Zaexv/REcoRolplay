@@ -20,7 +20,7 @@ namespace REcoSample
 
 
 		//Variables privadas para usar en las funciones //
-		private Grammar grammarColors, grammarNombres, grammarYesNo;
+		private Grammar grammarColors, grammarNombres, grammarYesNo, grammarWeapons, grammarShoot;
 		private int state; //El estado del dialogo
 
 		public Formulario_Rolplay()
@@ -34,9 +34,11 @@ namespace REcoSample
 		{
 			//Inicializo este formulario
 			pictureBoxIA.Enabled = true;
+			pictureBoxGameOver.Visible = false;
+			pictureBoxGameOver.BackColor = Color.Transparent;
 			this.Enabled = true;
 
-			synth.Speak("Estimado ser humano. Has conseguido viajar en tiempo para salvar a la humanidad de la devastacion total.");
+			synth.Speak("Estimado ser humano. Has conseguido viajar a lo largo del tiempo para salvar a la humanidad de la devastacion total.");
 			//Inicializo las gramatica y todos sus componentes
 
 			//Inicializo la variable global de estado
@@ -47,6 +49,8 @@ namespace REcoSample
 			grammarColors = CreateGrammarColors(null);
 			grammarNombres = CreateGrammarName(null);
 			grammarYesNo = CreateGrammarYesNo(null);
+			grammarWeapons = CreateGrammarWeapons(null);
+			grammarShoot = CreateGrammarShoot(null);
 
 
 			//No cambiar, inicializando el recognizer
@@ -56,6 +60,8 @@ namespace REcoSample
 			_recognizer.LoadGrammar(grammarColors);
 			_recognizer.LoadGrammar(grammarNombres);
 			_recognizer.LoadGrammar(grammarYesNo);
+			_recognizer.LoadGrammar(grammarWeapons);
+			_recognizer.LoadGrammar(grammarShoot);
 			// Nivel de confianza del reconocimiento 60%
 			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 60);
 
@@ -131,14 +137,128 @@ namespace REcoSample
 						DesactivarGramatica(grammarNombres);
 						synth.Speak("Ahora escoge un arma con la que salvar el mundo");
 						pictureBoxIA.Image = Properties.Resources.weapons;
+						ActivarGramatica(grammarWeapons);
 						this.state = 2;
                     }
 				break;
+				case 2:
+					if (semantics.ContainsKey("wea"))
+                    {
+						pictureBoxIA.Image = Properties.Resources.ia;
+						resultValue = (String)semantics["wea"].Value;
+						synth.Speak("Has elegido tu " + resultValue + " .");
+
+                        switch (resultValue)
+                        {
+							case "blaster":
+								pictureBoxIA.Image = Properties.Resources.blaster;
+								this.state = 3; 
+							break;
+							case "francotirador":
+								pictureBoxIA.Image = Properties.Resources.francotirador;
+								this.state = 3; 
+							break;
+							case "pistola":
+								pictureBoxIA.Image = Properties.Resources.chucknorris;
+								this.state = 9; 
+							break;
+                        }
+						DesactivarGramatica(grammarWeapons);
+						ActivarGramatica(grammarShoot);
+						synth.Speak("Oh no, vienen los devastadores del mal");
+						synth.Speak("¿A qué vas a disparar?");
+					}
+				break;
+				case 9:
+					synth.Speak("Por mucho que seas un viajero del tiempo no puedes matar a Chuck Norris, has perdido");
+					pictureBoxGameOver.Image = Properties.Resources.gameover;
+					pictureBoxGameOver.Enabled = true;
+					pictureBoxGameOver.Visible = true;
+					synth.Speak("Game over.");
+				break; 
             }
 		}
 
+		private Grammar CreateGrammarShoot(params int[] info)
+		{
+			//Todo Pulir los tipos de Disparo
+			Choices shootChoice = new Choices();
 
-			private Grammar CreateGrammarColors(params int[] info)
+			SemanticResultValue choiceResultValue =
+					new SemanticResultValue("cabeza", "cabeza");
+			GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			shootChoice.Add(resultValueBuilder);
+
+			choiceResultValue =
+				   new SemanticResultValue("hombre", "hombre");
+			resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			shootChoice.Add(resultValueBuilder);
+
+			choiceResultValue =
+				   new SemanticResultValue("pistola", "pistola");
+			resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			shootChoice.Add(resultValueBuilder);
+
+			SemanticResultKey choiceResultKey = new SemanticResultKey("sht", shootChoice);
+			GrammarBuilder shoot = new GrammarBuilder(choiceResultKey);
+
+
+			GrammarBuilder disparar = "disparar";
+			GrammarBuilder matar = "matar";
+			GrammarBuilder elegir = "elegir";
+			GrammarBuilder apuntar = "apuntar";
+			//Todo sería ideal que funcione la cadena vacía.
+			Choices cuatro_alternativas = new Choices(elegir, disparar, matar, apuntar);
+			GrammarBuilder frase = new GrammarBuilder(cuatro_alternativas);
+			frase.Append(shoot);
+
+			Grammar grammar = new Grammar(frase);
+			grammar.Name = "Elegir Disparo";
+
+			return grammar;
+		}
+
+
+		private Grammar CreateGrammarWeapons(params int[] info)
+		{
+			//synth.Speak("Creando ahora la gram�tica");
+			Choices weaponChoice = new Choices();
+
+			SemanticResultValue choiceResultValue =
+					new SemanticResultValue("blaster", "blaster");
+			GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			weaponChoice.Add(resultValueBuilder);
+
+			choiceResultValue =
+				   new SemanticResultValue("francotirador", "francotirador");
+			resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			weaponChoice.Add(resultValueBuilder);
+
+			choiceResultValue =
+				   new SemanticResultValue("pistola", "pistola");
+			resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			weaponChoice.Add(resultValueBuilder);
+
+			SemanticResultKey choiceResultKey = new SemanticResultKey("wea", weaponChoice);
+			GrammarBuilder weapons = new GrammarBuilder(choiceResultKey);
+
+
+			GrammarBuilder seleccionar = "seleccionar";
+			GrammarBuilder escoger = "escoger";
+			GrammarBuilder coger = "coger";
+			GrammarBuilder elegir = "elegir";
+
+			Choices cuatro_alternativas = new Choices(elegir, seleccionar, escoger, coger);
+			GrammarBuilder frase = new GrammarBuilder(cuatro_alternativas);
+			frase.Append(weapons);
+			Grammar grammar = new Grammar(frase);
+			grammar.Name = "Seleccionar Arma";
+
+			return grammar;
+		}
+
+
+		private Grammar CreateGrammarColors(params int[] info)
 			{
 				//synth.Speak("Creando ahora la gram�tica");
 				Choices colorChoice = new Choices();
