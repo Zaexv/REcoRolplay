@@ -138,7 +138,13 @@ namespace REcoSample
 						synth.Speak("Ahora escoge un arma con la que salvar el mundo");
 						pictureBoxIA.Image = Properties.Resources.weapons;
 						ActivarGramatica(grammarWeapons);
+						this.hint_lbl.Text = "";
 						this.state = 2;
+                    }
+
+					else
+                    {
+						this.hint_lbl.Text = "Hint: Soy/Me llamo ___";
                     }
 				break;
 				case 2:
@@ -164,11 +170,16 @@ namespace REcoSample
 							break;
                         }
 						DesactivarGramatica(grammarWeapons);
+						this.hint_lbl.Text = "";
 						ActivarGramatica(grammarShoot);
 						synth.Speak("Oh no, vienen los devastadores del mal");
 						synth.Speak("¿A qué vas a disparar?");
 					}
-				break;
+					else
+					{
+						this.hint_lbl.Text = "Hint: Seleccionar/Elegir ___";
+					}
+					break;
 				case 9:
 					synth.Speak("Por mucho que seas un viajero del tiempo no puedes matar a Chuck Norris, has perdido");
 					pictureBoxGameOver.Image = Properties.Resources.gameover;
@@ -218,8 +229,7 @@ namespace REcoSample
 			return grammar;
 		}
 
-
-		private Grammar CreateGrammarWeapons(params int[] info)
+        private Grammar CreateGrammarWeapons(params int[] info)
 		{
 			//synth.Speak("Creando ahora la gram�tica");
 			Choices weaponChoice = new Choices();
