@@ -60,6 +60,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
@@ -78,9 +79,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\blaster.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\chucknorris.gif" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\gameover.png" />
+    <Content Include="Resources\blaster.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
