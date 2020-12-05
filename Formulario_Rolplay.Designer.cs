@@ -39,10 +39,10 @@ namespace REcoSample
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(45, 93);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(68, 146);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 54);
+            this.label1.Size = new System.Drawing.Size(0, 85);
             this.label1.TabIndex = 0;
             // 
             // pictureBoxGameOver
@@ -53,10 +53,9 @@ namespace REcoSample
             this.pictureBoxGameOver.BackColor = System.Drawing.Color.Transparent;
             this.pictureBoxGameOver.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBoxGameOver.Image = global::REcoSample.Properties.Resources.gameover;
-            this.pictureBoxGameOver.Location = new System.Drawing.Point(486, 237);
-            this.pictureBoxGameOver.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBoxGameOver.Location = new System.Drawing.Point(729, 370);
             this.pictureBoxGameOver.Name = "pictureBoxGameOver";
-            this.pictureBoxGameOver.Size = new System.Drawing.Size(760, 473);
+            this.pictureBoxGameOver.Size = new System.Drawing.Size(1140, 739);
             this.pictureBoxGameOver.TabIndex = 3;
             this.pictureBoxGameOver.TabStop = false;
             // 
@@ -65,21 +64,22 @@ namespace REcoSample
             this.pictureBoxIA.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxIA.Image = global::REcoSample.Properties.Resources.ia;
             this.pictureBoxIA.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxIA.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxIA.Name = "pictureBoxIA";
-            this.pictureBoxIA.Size = new System.Drawing.Size(1283, 675);
+            this.pictureBoxIA.Size = new System.Drawing.Size(2564, 1417);
             this.pictureBoxIA.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxIA.TabIndex = 1;
             this.pictureBoxIA.TabStop = false;
             // 
             // Formulario_Rolplay
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1283, 675);
+            this.ClientSize = new System.Drawing.Size(2564, 1417);
             this.Controls.Add(this.pictureBoxGameOver);
             this.Controls.Add(this.pictureBoxIA);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "Formulario_Rolplay";
             this.Text = "Minijuego de Rol";
             this.Load += new System.EventHandler(this.Form1_Load);

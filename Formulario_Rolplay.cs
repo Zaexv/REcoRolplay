@@ -164,8 +164,9 @@ namespace REcoSample
 							break;
                         }
 						DesactivarGramatica(grammarWeapons);
-						ActivarGramatica(grammarYesNo);
-						synth.Speak("Deseas volver en el tiempo e intentar otros escenarios?");
+						ActivarGramatica(grammarShoot);
+						synth.Speak("Oh no, vienen los devastadores del mal");
+						synth.Speak("¿A qué vas a disparar?");
 					}
 				break;
 				case 9:
