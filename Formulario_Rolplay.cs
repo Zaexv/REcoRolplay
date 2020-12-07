@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Speech.Recognition;
 using System.Speech.Synthesis;
+using System.Media;
 
 namespace REcoSample
 {
@@ -54,9 +55,8 @@ namespace REcoSample
 			grammarSniper = CreateGrammarSniper(null);
 
 			//Sonidos
-			System.Media.SoundPlayer gameOver = new System.Media.SoundPlayer(@"c:\mywavfile.wav");
 			
-
+			
 
 			//No cambiar, inicializando el recognizer
 			_recognizer.SetInputToDefaultAudioDevice();
@@ -211,7 +211,11 @@ namespace REcoSample
 								DesactivarImagen(pictureBoxBabyYoda);
 								DesactivarGramatica(grammarYesNo);
 								pictureBoxIA.Image = Properties.Resources.gameover2;
-								
+								System.Media.SoundPlayer gameOverMusic = new System.Media.SoundPlayer(Properties.Resources.gameOverMusic);
+								gameOverMusic.Play();
+
+
+
 								synth.Speak("Game over.");
 								break;
 							case "No":
