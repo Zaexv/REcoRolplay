@@ -60,6 +60,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
@@ -78,9 +79,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\blaster.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\chucknorris.gif" />
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +91,11 @@
     <None Include="Resources\weapons.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\choqueVehiculo.gif" />
+    <Content Include="Resources\gameover2.gif" />
+    <Content Include="Resources\IndianaJones.jpg" />
+    <Content Include="Resources\indianaJonesASalvo.gif" />
+    <None Include="Resources\babyYoda.png" />
     <Content Include="Resources\gameover.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

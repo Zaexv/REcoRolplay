@@ -20,7 +20,7 @@ namespace REcoSample
 
 
 		//Variables privadas para usar en las funciones //
-		private Grammar grammarColors, grammarNombres, grammarYesNo, grammarWeapons, grammarShoot;
+		private Grammar grammarColors, grammarNombres, grammarYesNo, grammarWeapons, grammarShoot, grammarSniper;
 		private int state; //El estado del dialogo
 
 		public Formulario_Rolplay()
@@ -51,6 +51,11 @@ namespace REcoSample
 			grammarYesNo = CreateGrammarYesNo(null);
 			grammarWeapons = CreateGrammarWeapons(null);
 			grammarShoot = CreateGrammarShoot(null);
+			grammarSniper = CreateGrammarSniper(null);
+
+			//Sonidos
+			System.Media.SoundPlayer gameOver = new System.Media.SoundPlayer(@"c:\mywavfile.wav");
+			
 
 
 			//No cambiar, inicializando el recognizer
@@ -62,6 +67,7 @@ namespace REcoSample
 			_recognizer.LoadGrammar(grammarYesNo);
 			_recognizer.LoadGrammar(grammarWeapons);
 			_recognizer.LoadGrammar(grammarShoot);
+			_recognizer.LoadGrammar(grammarSniper);
 			// Nivel de confianza del reconocimiento 60%
 			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 60);
 
@@ -88,6 +94,20 @@ namespace REcoSample
         {
 			grammar.Enabled = false;
         }
+		
+		//Mostrar imagen
+		private void ActivarImagen(PictureBox imagen)
+		{
+			imagen.Enabled = true;
+			imagen.Visible = true;
+		}
+
+		//Ocultar imagen
+		private void DesactivarImagen(PictureBox imagen)
+		{
+			imagen.Enabled = false;
+			imagen.Visible = false;
+		}
 
 
 		void _recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
@@ -152,23 +172,82 @@ namespace REcoSample
                         {
 							case "blaster":
 								pictureBoxIA.Image = Properties.Resources.blaster;
+								synth.Speak("Cuidado, ahí se encuentra el peligroso Mandalorian, quieres dispararle con tu blaser?");
+								DesactivarGramatica(grammarWeapons);
+								ActivarGramatica(grammarYesNo);
 								this.state = 3; 
+
 							break;
-							case "francotirador":
+							case "sniper":
+								synth.Speak("Indiana Jones se encuentra capturado en alguno de estos dos vehiculos. Quieres disparar al vehiculo de la izquierda o de la derecha?");
 								pictureBoxIA.Image = Properties.Resources.francotirador;
-								this.state = 3; 
+								DesactivarGramatica(grammarWeapons);
+								ActivarGramatica(grammarSniper);
+								this.state = 4; 
 							break;
 							case "pistola":
 								pictureBoxIA.Image = Properties.Resources.chucknorris;
+								synth.Speak("Te toca enfrentarte al gran Chuck Norris, en donde le vas a disparar?");
+								DesactivarGramatica(grammarWeapons);
+								ActivarGramatica(grammarShoot);
 								this.state = 9; 
 							break;
                         }
 						DesactivarGramatica(grammarWeapons);
-						ActivarGramatica(grammarShoot);
-						synth.Speak("Oh no, vienen los devastadores del mal");
-						synth.Speak("¿A qué vas a disparar?");
+						
+						
 					}
 				break;
+				case 3:
+					if (semantics.ContainsKey("yn"))
+					{
+						resultValue = (String)semantics["yn"].Value;
+						synth.Speak("Has dicho que " + resultValue + ", ¿eh?");
+						switch (resultValue)
+						{
+							case "Si":
+								ActivarImagen(pictureBoxBabyYoda);
+								synth.Speak("Oh no, Baby Yoda acaba de aparecer y utilizó la fuerza para derrotarte");
+								DesactivarImagen(pictureBoxBabyYoda);
+								DesactivarGramatica(grammarYesNo);
+								pictureBoxIA.Image = Properties.Resources.gameover2;
+								
+								synth.Speak("Game over.");
+								break;
+							case "No":
+								ActivarImagen(pictureBoxBabyYoda);
+								synth.Speak("Excelente elección, con Baby Yoda de nuestro lado seremos capaces de salvar al mundo");
+								break;
+						}
+					}
+					break;
+				case 4:
+					if (semantics.ContainsKey("sn"))
+					{
+						resultValue = (String)semantics["sn"].Value;
+						synth.Speak("Has dicho " + resultValue + ", ¿eh?");
+						switch (resultValue)
+						{
+							case "Izquierda":
+								DesactivarGramatica(grammarSniper);
+								pictureBoxIA.Image = Properties.Resources.choqueVehiculo;
+								wait(5000);
+								synth.Speak("Oh no, acabas de destruir el vehiculo de Indiana Jones, ya no podra ayudarnos a salvar a la humanidad");
+								synth.Speak("Game Over");
+								pictureBoxIA.Image = Properties.Resources.gameover2;
+								break;
+							case "Derecha":
+								DesactivarGramatica(grammarSniper);
+								pictureBoxIA.Image = Properties.Resources.indianaJonesASalvo;
+								wait(3000);
+								pictureBoxIA.Image = Properties.Resources.IndianaJones;
+								wait(1000);
+								synth.Speak("Muy buen disparo!");
+								synth.Speak("Acabas de salvar a Indiana Jones, y con su ayuda conseguiremos salvar al mundo.");
+								break;
+						}
+					}
+					break;
 				case 9:
 					synth.Speak("Por mucho que seas un viajero del tiempo no puedes matar a Chuck Norris, has perdido");
 					pictureBoxGameOver.Image = Properties.Resources.gameover;
@@ -218,8 +297,7 @@ namespace REcoSample
 			return grammar;
 		}
 
-
-		private Grammar CreateGrammarWeapons(params int[] info)
+        private Grammar CreateGrammarWeapons(params int[] info)
 		{
 			//synth.Speak("Creando ahora la gram�tica");
 			Choices weaponChoice = new Choices();
@@ -230,7 +308,7 @@ namespace REcoSample
 			weaponChoice.Add(resultValueBuilder);
 
 			choiceResultValue =
-				   new SemanticResultValue("francotirador", "francotirador");
+				   new SemanticResultValue("sniper", "sniper");
 			resultValueBuilder = new GrammarBuilder(choiceResultValue);
 			weaponChoice.Add(resultValueBuilder);
 
@@ -304,17 +382,17 @@ namespace REcoSample
 
 
 				SemanticResultValue choiceResultValue =
-						new SemanticResultValue("Paco", "Francisco");
+						new SemanticResultValue("Eduardo", "Eduardo");
 				GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
 				nameChoice.Add(resultValueBuilder);
 
 				choiceResultValue =
-					   new SemanticResultValue("Pepe", "Jose");
+					   new SemanticResultValue("Andrés", "Andrés");
 				resultValueBuilder = new GrammarBuilder(choiceResultValue);
 				nameChoice.Add(resultValueBuilder);
 
 				choiceResultValue =
-					   new SemanticResultValue("Rub�n", "Ruqui");
+					   new SemanticResultValue("Francisco", "Francisco");
 				resultValueBuilder = new GrammarBuilder(choiceResultValue);
 				nameChoice.Add(resultValueBuilder);
 
@@ -366,6 +444,51 @@ namespace REcoSample
 			grammar.Name = "Decir si / no";
 
 			return grammar;
+		}
+
+		private Grammar CreateGrammarSniper(params int[] info)
+		{
+			Choices sniperChoice = new Choices();
+			SemanticResultValue choiceResultValue =
+					new SemanticResultValue("Izquierda", "Izquierda");
+			GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			sniperChoice.Add(resultValueBuilder);
+
+			choiceResultValue =
+				   new SemanticResultValue("Derecha", "Derecha");
+			resultValueBuilder = new GrammarBuilder(choiceResultValue);
+			sniperChoice.Add(resultValueBuilder);
+
+			SemanticResultKey choiceResultKey = new SemanticResultKey("sn", sniperChoice);
+			GrammarBuilder sniper = new GrammarBuilder(choiceResultKey);
+
+			Grammar grammar = new Grammar(sniper);
+			grammar.Name = "Disparar izquierda / derecha";
+
+			return grammar;
+		}
+
+		public void wait(int milliseconds)
+		{
+			var timer1 = new System.Windows.Forms.Timer();
+			if (milliseconds == 0 || milliseconds < 0) return;
+
+			// Console.WriteLine("start wait timer");
+			timer1.Interval = milliseconds;
+			timer1.Enabled = true;
+			timer1.Start();
+
+			timer1.Tick += (s, e) =>
+			{
+				timer1.Enabled = false;
+				timer1.Stop();
+				// Console.WriteLine("stop wait timer");
+			};
+
+			while (timer1.Enabled)
+			{
+				Application.DoEvents();
+			}
 		}
 
 
