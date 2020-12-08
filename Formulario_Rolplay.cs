@@ -20,7 +20,7 @@ namespace REcoSample
 
 
 		//Variables privadas para usar en las funciones //
-		private Grammar grammarColors, grammarNombres, grammarYesNo, grammarWeapons, grammarShoot, grammarSniper;
+		private Grammar grammarNombres, grammarYesNo, grammarWeapons, grammarShoot, grammarSniper;
 		private int state; //El estado del dialogo
 
 		public Formulario_Rolplay()
@@ -49,7 +49,6 @@ namespace REcoSample
 			
 
 			//Creo las gramaticas con las funciones para crearlas
-			grammarColors = CreateGrammarColors(null);
 			grammarNombres = CreateGrammarName(null);
 			grammarYesNo = CreateGrammarYesNo(null);
 			grammarWeapons = CreateGrammarWeapons(null);
@@ -65,14 +64,13 @@ namespace REcoSample
 			_recognizer.SetInputToDefaultAudioDevice();
 			_recognizer.UnloadAllGrammars();
 
-			_recognizer.LoadGrammar(grammarColors);
 			_recognizer.LoadGrammar(grammarNombres);
 			_recognizer.LoadGrammar(grammarYesNo);
 			_recognizer.LoadGrammar(grammarWeapons);
 			_recognizer.LoadGrammar(grammarShoot);
 			_recognizer.LoadGrammar(grammarSniper);
 			// Nivel de confianza del reconocimiento 60%
-			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 60);
+			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 65);
 
 			//Activo la gram�ticas creadas previamente.
 			//ActivarGramatica(grammarNombres);
@@ -122,9 +120,8 @@ namespace REcoSample
 			string rawText = e.Result.Text;
 			RecognitionResult result = e.Result;
 			string resultValue;
-			Console.WriteLine(rawText); //Pinto el RawText para debuggear
+			Console.WriteLine(rawText);
 
-			//Implementamos de forma "cutre" la m�quina de estados
 			switch (state)
             {
 				case 0:
@@ -154,10 +151,9 @@ namespace REcoSample
 				case 1:
                     if (semantics.ContainsKey("nom"))
                     {
-											//TODO aqui molaria mil que reconociese el nombre cualfuese
+						DesactivarGramatica(grammarNombres);
 						resultValue = (String)semantics["nom"].Value;
 						synth.Speak("Estoy encantada de conocerte, " + resultValue);
-						DesactivarGramatica(grammarNombres);
 						synth.Speak("Ahora escoge un arma con la que salvar el mundo");
 						pictureBoxIA.Image = Properties.Resources.weapons;
 						ActivarGramatica(grammarWeapons);
@@ -167,44 +163,39 @@ namespace REcoSample
 				case 2:
 					if (semantics.ContainsKey("wea"))
                     {
+						DesactivarGramatica(grammarWeapons);
 						pictureBoxIA.Image = Properties.Resources.ia;
 						resultValue = (String)semantics["wea"].Value;
 						synth.Speak("Has elegido tu " + resultValue + " .");
-
                         switch (resultValue)
                         {
 							case "blaster":
 								pictureBoxIA.Image = Properties.Resources.blaster;
-								synth.Speak("Cuidado, ahí se encuentra el peligroso Mandalorian, quieres dispararle con tu blaser?");
-								DesactivarGramatica(grammarWeapons);
+								synth.Speak("Cuidado, ahí se encuentra el peligroso Mandalorian, quieres dispararle con tu blaster?");					
+								this.state = 3;
 								ActivarGramatica(grammarYesNo);
-								this.state = 3; 
-
-							break;
+								break;
 							case "sniper":
 								pictureBoxIA.Image = Properties.Resources.francotirador;
 								synth.Speak("Indiana Jones se encuentra capturado en alguno de estos dos vehiculos. Quieres disparar al vehículo de la izquierda o de la derecha?");
-								DesactivarGramatica(grammarWeapons);
+								this.state = 4;
 								ActivarGramatica(grammarSniper);
-								this.state = 4; 
 							break;
 							case "pistola":
 								pictureBoxIA.Image = Properties.Resources.chucknorris;
 								synth.Speak("Te toca enfrentarte al gran Chuck Norris, en donde le vas a disparar?");
-								DesactivarGramatica(grammarWeapons);
+								this.state = 9;
 								ActivarGramatica(grammarShoot);
-								this.state = 9; 
 							break;
                         }
-						DesactivarGramatica(grammarWeapons);
-						
-						
+						wait(1000);
 					}
 				break;
 				case 3:
 					if (semantics.ContainsKey("yn"))
 					{
 						resultValue = (String)semantics["yn"].Value;
+						DesactivarGramatica(grammarYesNo);
 						synth.Speak("Has dicho que " + resultValue + ", ¿eh?");
 						switch (resultValue)
 						{
@@ -215,7 +206,6 @@ namespace REcoSample
 								ActivarImagen(pictureBoxBabyYoda);
 								synth.Speak("Oh no, Baby Yoda acaba de aparecer y utilizó la fuerza para derrotarte");
 								DesactivarImagen(pictureBoxBabyYoda);
-								DesactivarGramatica(grammarYesNo);
 								pictureBoxIA.Image = Properties.Resources.gameover2;
 								System.Media.SoundPlayer gameOverPlayer = new System.Media.SoundPlayer(Properties.Resources.gameOverMusic);
 								gameOverPlayer.Play();
@@ -224,7 +214,7 @@ namespace REcoSample
 								break;
 							case "No":
 								System.Media.SoundPlayer starWars = new System.Media.SoundPlayer(Properties.Resources.starWarsMusic);
-								starWars.Play();
+								starWars.Play();	
 								ActivarImagen(pictureBoxBabyYoda);
 								synth.Speak("Excelente elección, con Baby Yoda de nuestro lado seremos capaces de salvar al mundo. Ganaste la partida! Reinicia el programa para visitar otros escenarios.");
 								break;
@@ -234,12 +224,12 @@ namespace REcoSample
 				case 4:
 					if (semantics.ContainsKey("sn"))
 					{
+						DesactivarGramatica(grammarSniper);
 						resultValue = (String)semantics["sn"].Value;
 						synth.Speak("Has dicho " + resultValue + ", ¿eh?");
 						switch (resultValue)
 						{
 							case "Izquierda":
-								DesactivarGramatica(grammarSniper);
 								System.Media.SoundPlayer shotSoundPlayer2 = new System.Media.SoundPlayer(Properties.Resources.shotSound);
 								shotSoundPlayer2.Play();
 								pictureBoxIA.Image = Properties.Resources.choqueVehiculo;
@@ -251,7 +241,6 @@ namespace REcoSample
 								gameOverPlayer5.Play();
 								break;
 							case "Derecha":
-								DesactivarGramatica(grammarSniper);
 								System.Media.SoundPlayer shotSoundPlayer3 = new System.Media.SoundPlayer(Properties.Resources.shotSound);
 								shotSoundPlayer3.Play();
 								wait(1000);
@@ -268,21 +257,24 @@ namespace REcoSample
 					}
 					break;
 				case 9:
-					System.Media.SoundPlayer shotPlayer = new System.Media.SoundPlayer(Properties.Resources.shotSound);
-					shotPlayer.Play();
-					wait(1000);
-					synth.Speak("Por mucho que seas un viajero del tiempo no puedes matar a Chuck Norris, has perdido.");
-					pictureBoxIA.Image = Properties.Resources.gameover2;
+					if (semantics.ContainsKey("sht"))
+					{
+						DesactivarGramatica(grammarShoot);
+						System.Media.SoundPlayer shotPlayer = new System.Media.SoundPlayer(Properties.Resources.shotSound);
+						shotPlayer.Play();
+						wait(1000);
+						synth.Speak("Por mucho que seas un viajero del tiempo no puedes matar a Chuck Norris, has perdido.");
+						pictureBoxIA.Image = Properties.Resources.gameover2;
 						System.Media.SoundPlayer gameOverPlayer2 = new System.Media.SoundPlayer(Properties.Resources.gameOverMusic);
-					gameOverPlayer2.Play();
-					synth.Speak("Game over. Reinicia el programa para visitar otros escenarios.");
+						gameOverPlayer2.Play();
+						synth.Speak("Game over. Reinicia el programa para visitar otros escenarios.");
+					}
 				break; 
             }
 		}
 
 		private Grammar CreateGrammarShoot(params int[] info)
 		{
-			//Todo Pulir los tipos de Disparo
 			Choices shootChoice = new Choices();
 
 			SemanticResultValue choiceResultValue =
@@ -321,7 +313,6 @@ namespace REcoSample
 
         private Grammar CreateGrammarWeapons(params int[] info)
 		{
-			//synth.Speak("Creando ahora la gram�tica");
 			Choices weaponChoice = new Choices();
 
 			SemanticResultValue choiceResultValue =
@@ -357,46 +348,6 @@ namespace REcoSample
 			return grammar;
 		}
 
-
-		private Grammar CreateGrammarColors(params int[] info)
-			{
-				//synth.Speak("Creando ahora la gram�tica");
-				Choices colorChoice = new Choices();
-
-				SemanticResultValue choiceResultValue =
-						new SemanticResultValue("Rojo", Color.FromName("Red").ToArgb());
-				GrammarBuilder resultValueBuilder = new GrammarBuilder(choiceResultValue);
-				colorChoice.Add(resultValueBuilder);
-
-				choiceResultValue =
-					   new SemanticResultValue("Azul", Color.FromName("Blue").ToArgb());
-				resultValueBuilder = new GrammarBuilder(choiceResultValue);
-				colorChoice.Add(resultValueBuilder);
-
-				choiceResultValue =
-					   new SemanticResultValue("Verde", Color.FromName("Green").ToArgb());
-				resultValueBuilder = new GrammarBuilder(choiceResultValue);
-				colorChoice.Add(resultValueBuilder);
-
-				SemanticResultKey choiceResultKey = new SemanticResultKey("rgb", colorChoice);
-				GrammarBuilder colors = new GrammarBuilder(choiceResultKey);
-
-
-				GrammarBuilder poner = "Poner";
-				GrammarBuilder cambiar = "Cambiar";
-				GrammarBuilder fondo = "Fondo";
-
-				Choices dos_alternativas = new Choices(poner, cambiar);
-				GrammarBuilder frase = new GrammarBuilder(dos_alternativas);
-				frase.Append(fondo);
-				frase.Append(colors);
-				Grammar grammar = new Grammar(frase);
-				grammar.Name = "Poner/Cambiar Colores";
-
-				return grammar;
-			}
-
-
 			private Grammar CreateGrammarName(params int[] info)
 			{
 				//synth.Speak("Creando ahora la gramatica");
@@ -422,11 +373,11 @@ namespace REcoSample
 				GrammarBuilder nombres = new GrammarBuilder(choiceResultKey);
 
 
-				GrammarBuilder poner = "mi nombre es";
-				GrammarBuilder cambiar = "me llamo";
+				GrammarBuilder mi_nombre_es = "mi nombre es";
+				GrammarBuilder me_llamo = "me llamo";
 
 
-				Choices dos_alternativas = new Choices(poner, cambiar);
+				Choices dos_alternativas = new Choices(mi_nombre_es, me_llamo);
 				GrammarBuilder frase = new GrammarBuilder(dos_alternativas);
 				frase.Append(nombres);
 				Grammar grammar = new Grammar(frase);
