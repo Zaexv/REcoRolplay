@@ -38,6 +38,9 @@ namespace REcoSample
 			pictureBoxGameOver.BackColor = Color.Transparent;
 			this.Enabled = true;
 
+			System.Media.SoundPlayer backgroundPlayer = new System.Media.SoundPlayer(Properties.Resources.backgroundMusic);
+			backgroundPlayer.Play();
+
 			synth.Speak("Estimado ser humano. Has conseguido viajar a lo largo del tiempo para salvar a la humanidad de la devastacion total.");
 			//Inicializo las gramatica y todos sus componentes
 
@@ -179,8 +182,8 @@ namespace REcoSample
 
 							break;
 							case "sniper":
-								synth.Speak("Indiana Jones se encuentra capturado en alguno de estos dos vehiculos. Quieres disparar al vehiculo de la izquierda o de la derecha?");
 								pictureBoxIA.Image = Properties.Resources.francotirador;
+								synth.Speak("Indiana Jones se encuentra capturado en alguno de estos dos vehiculos. Quieres disparar al vehículo de la izquierda o de la derecha?");
 								DesactivarGramatica(grammarWeapons);
 								ActivarGramatica(grammarSniper);
 								this.state = 4; 
@@ -206,17 +209,24 @@ namespace REcoSample
 						switch (resultValue)
 						{
 							case "Si":
+								System.Media.SoundPlayer shotSoundPlayer = new System.Media.SoundPlayer(Properties.Resources.shotSound);
+								shotSoundPlayer.Play();
+								wait(1000);
 								ActivarImagen(pictureBoxBabyYoda);
 								synth.Speak("Oh no, Baby Yoda acaba de aparecer y utilizó la fuerza para derrotarte");
 								DesactivarImagen(pictureBoxBabyYoda);
 								DesactivarGramatica(grammarYesNo);
 								pictureBoxIA.Image = Properties.Resources.gameover2;
-								
-								synth.Speak("Game over.");
+								System.Media.SoundPlayer gameOverPlayer = new System.Media.SoundPlayer(Properties.Resources.gameOverMusic);
+								gameOverPlayer.Play();
+
+								synth.Speak("Game over. Reinicia el programa para visitar otros escenarios.");
 								break;
 							case "No":
+								System.Media.SoundPlayer starWars = new System.Media.SoundPlayer(Properties.Resources.starWarsMusic);
+								starWars.Play();
 								ActivarImagen(pictureBoxBabyYoda);
-								synth.Speak("Excelente elección, con Baby Yoda de nuestro lado seremos capaces de salvar al mundo");
+								synth.Speak("Excelente elección, con Baby Yoda de nuestro lado seremos capaces de salvar al mundo. Ganaste la partida! Reinicia el programa para visitar otros escenarios.");
 								break;
 						}
 					}
@@ -230,30 +240,42 @@ namespace REcoSample
 						{
 							case "Izquierda":
 								DesactivarGramatica(grammarSniper);
+								System.Media.SoundPlayer shotSoundPlayer2 = new System.Media.SoundPlayer(Properties.Resources.shotSound);
+								shotSoundPlayer2.Play();
 								pictureBoxIA.Image = Properties.Resources.choqueVehiculo;
 								wait(5000);
 								synth.Speak("Oh no, acabas de destruir el vehiculo de Indiana Jones, ya no podra ayudarnos a salvar a la humanidad");
-								synth.Speak("Game Over");
 								pictureBoxIA.Image = Properties.Resources.gameover2;
+								synth.Speak("Game Over. Reinicia el programa para visitar otros escenarios.");
+								System.Media.SoundPlayer gameOverPlayer5 = new System.Media.SoundPlayer(Properties.Resources.gameOverMusic);
+								gameOverPlayer5.Play();
 								break;
 							case "Derecha":
 								DesactivarGramatica(grammarSniper);
+								System.Media.SoundPlayer shotSoundPlayer3 = new System.Media.SoundPlayer(Properties.Resources.shotSound);
+								shotSoundPlayer3.Play();
+								wait(1000);
+								System.Media.SoundPlayer player3 = new System.Media.SoundPlayer(Properties.Resources.IndianaJonesMusic);
+								player3.Play();
 								pictureBoxIA.Image = Properties.Resources.indianaJonesASalvo;
-								wait(3000);
+								wait(5000);
 								pictureBoxIA.Image = Properties.Resources.IndianaJones;
 								wait(1000);
 								synth.Speak("Muy buen disparo!");
-								synth.Speak("Acabas de salvar a Indiana Jones, y con su ayuda conseguiremos salvar al mundo.");
+								synth.Speak("Acabas de salvar a Indiana Jones, y con su ayuda conseguiremos salvar al mundo. Ganaste la partida! Reinicia el programa para visitar otros escenarios.");
 								break;
 						}
 					}
 					break;
 				case 9:
-					synth.Speak("Por mucho que seas un viajero del tiempo no puedes matar a Chuck Norris, has perdido");
-					pictureBoxGameOver.Image = Properties.Resources.gameover;
-					pictureBoxGameOver.Enabled = true;
-					pictureBoxGameOver.Visible = true;
-					synth.Speak("Game over.");
+					System.Media.SoundPlayer shotPlayer = new System.Media.SoundPlayer(Properties.Resources.shotSound);
+					shotPlayer.Play();
+					wait(1000);
+					synth.Speak("Por mucho que seas un viajero del tiempo no puedes matar a Chuck Norris, has perdido.");
+					pictureBoxIA.Image = Properties.Resources.gameover2;
+						System.Media.SoundPlayer gameOverPlayer2 = new System.Media.SoundPlayer(Properties.Resources.gameOverMusic);
+					gameOverPlayer2.Play();
+					synth.Speak("Game over. Reinicia el programa para visitar otros escenarios.");
 				break; 
             }
 		}
@@ -393,13 +415,6 @@ namespace REcoSample
 
 				choiceResultValue =
 					   new SemanticResultValue("Francisco", "Francisco");
-				resultValueBuilder = new GrammarBuilder(choiceResultValue);
-				nameChoice.Add(resultValueBuilder);
-
-
-				choiceResultValue =
-					   new SemanticResultValue("Claudia", "Mi querida loca del co�o");
-				resultValueBuilder = new GrammarBuilder(choiceResultValue);
 				resultValueBuilder = new GrammarBuilder(choiceResultValue);
 				nameChoice.Add(resultValueBuilder);
 
