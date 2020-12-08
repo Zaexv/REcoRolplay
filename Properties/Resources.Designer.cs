@@ -71,15 +71,6 @@ namespace REcoSample.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream backgroundMusic {
-            get {
-                return ResourceManager.GetStream("backgroundMusic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap blaster {
@@ -140,15 +131,6 @@ namespace REcoSample.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream gameOverMusic {
-            get {
-                return ResourceManager.GetStream("gameOverMusic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap ia {
@@ -175,24 +157,6 @@ namespace REcoSample.Properties {
             get {
                 object obj = ResourceManager.GetObject("indianaJonesASalvo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream IndianaJonesMusic {
-            get {
-                return ResourceManager.GetStream("IndianaJonesMusic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream shotSound {
-            get {
-                return ResourceManager.GetStream("shotSound", resourceCulture);
             }
         }
         

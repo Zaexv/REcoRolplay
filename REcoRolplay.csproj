@@ -91,12 +91,8 @@
     <None Include="Resources\weapons.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\backgroundMusic.wav" />
     <Content Include="Resources\choqueVehiculo.gif" />
     <Content Include="Resources\gameover2.gif" />
-    <None Include="Resources\shotSound.wav" />
-    <None Include="Resources\IndianaJonesMusic.wav" />
-    <None Include="Resources\gameOverMusic.wav" />
     <Content Include="Resources\IndianaJones.jpg" />
     <Content Include="Resources\indianaJonesASalvo.gif" />
     <None Include="Resources\babyYoda.png" />

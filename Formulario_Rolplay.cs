@@ -38,22 +38,12 @@ namespace REcoSample
 			pictureBoxGameOver.BackColor = Color.Transparent;
 			this.Enabled = true;
 
-			System.Media.SoundPlayer backgroundPlayer = new System.Media.SoundPlayer(Properties.Resources.backgroundMusic);
-			backgroundPlayer.Play();
-
-
 			synth.Speak("Estimado ser humano. Has conseguido viajar a lo largo del tiempo para salvar a la humanidad de la devastacion total.");
 			//Inicializo las gramatica y todos sus componentes
 
 			//Inicializo la variable global de estado
 			state = 0;
-
-			//definir parents de labels
-			nombreHintlbl.Parent = pictureBoxIA;
-			nombreHintlbl.BackColor = Color.Transparent;
-
-			hintArmaslbl.Parent = pictureBoxIA;
-			hintArmaslbl.BackColor = Color.Transparent;
+			
 
 			//Creo las gramaticas con las funciones para crearlas
 			grammarColors = CreateGrammarColors(null);
@@ -92,8 +82,6 @@ namespace REcoSample
 			_recognizer.RecognizeAsync(RecognizeMode.Multiple);
 			synth.Speak("Ahora cuentame; ¿Quieres participar en nuestra lucha?");
 		}
-
-		
 
 		//Activa una gram�tica para ser usada
 		private void ActivarGramatica(Grammar grammar)
@@ -144,7 +132,6 @@ namespace REcoSample
 						switch (resultValue)
                         {
 							case "Si":
-								
 								//Cambio el estado
 								this.state = 1;
 								//Desactivo la posibilidad de decir s� o no
@@ -152,8 +139,6 @@ namespace REcoSample
 								synth.Speak("Ahora dime tu nombre");
 								//Activo la posibilidad de decir el nombre
 								ActivarGramatica(grammarNombres);
-								//wait(2000);
-								//nombreHintlbl.Visible = true;
 							break;
 							case "No":
 								synth.Speak("Te voy a preguntar hasta que digas que sí.");
@@ -166,28 +151,24 @@ namespace REcoSample
 				case 1:
                     if (semantics.ContainsKey("nom"))
                     {
-						//TODO aqui molaria mil que reconociese el nombre cualfuese
-						//nombreHintlbl.Visible = false;
+											//TODO aqui molaria mil que reconociese el nombre cualfuese
 						resultValue = (String)semantics["nom"].Value;
 						synth.Speak("Estoy encantada de conocerte, " + resultValue);
 						DesactivarGramatica(grammarNombres);
 						synth.Speak("Ahora escoge un arma con la que salvar el mundo");
 						pictureBoxIA.Image = Properties.Resources.weapons;
 						ActivarGramatica(grammarWeapons);
-						//hintArmaslbl.Visible = true;
-
-					}
+						this.state = 2;
+                    }
 				break;
 				case 2:
 					if (semantics.ContainsKey("wea"))
                     {
-						
 						pictureBoxIA.Image = Properties.Resources.ia;
 						resultValue = (String)semantics["wea"].Value;
 						synth.Speak("Has elegido tu " + resultValue + " .");
-						//hintArmaslbl.Visible = false;
 
-						switch (resultValue)
+                        switch (resultValue)
                         {
 							case "blaster":
 								pictureBoxIA.Image = Properties.Resources.blaster;
@@ -198,8 +179,8 @@ namespace REcoSample
 
 							break;
 							case "sniper":
-								pictureBoxIA.Image = Properties.Resources.francotirador;
 								synth.Speak("Indiana Jones se encuentra capturado en alguno de estos dos vehiculos. Quieres disparar al vehiculo de la izquierda o de la derecha?");
+								pictureBoxIA.Image = Properties.Resources.francotirador;
 								DesactivarGramatica(grammarWeapons);
 								ActivarGramatica(grammarSniper);
 								this.state = 4; 
@@ -225,17 +206,12 @@ namespace REcoSample
 						switch (resultValue)
 						{
 							case "Si":
-								System.Media.SoundPlayer shotSoundPlayer = new System.Media.SoundPlayer(Properties.Resources.shotSound);
-								shotSoundPlayer.Play();
-								wait(1000);
 								ActivarImagen(pictureBoxBabyYoda);
 								synth.Speak("Oh no, Baby Yoda acaba de aparecer y utilizó la fuerza para derrotarte");
 								DesactivarImagen(pictureBoxBabyYoda);
 								DesactivarGramatica(grammarYesNo);
 								pictureBoxIA.Image = Properties.Resources.gameover2;
-								System.Media.SoundPlayer gameOverPlayer = new System.Media.SoundPlayer(Properties.Resources.gameOverMusic);
-								gameOverPlayer.Play();
-
+								
 								synth.Speak("Game over.");
 								break;
 							case "No":
@@ -254,28 +230,16 @@ namespace REcoSample
 						{
 							case "Izquierda":
 								DesactivarGramatica(grammarSniper);
-								System.Media.SoundPlayer shotSoundPlayer2 = new System.Media.SoundPlayer(Properties.Resources.shotSound);
-								shotSoundPlayer2.Play();
-								wait(1000);
 								pictureBoxIA.Image = Properties.Resources.choqueVehiculo;
 								wait(5000);
 								synth.Speak("Oh no, acabas de destruir el vehiculo de Indiana Jones, ya no podra ayudarnos a salvar a la humanidad");
 								synth.Speak("Game Over");
-								System.Media.SoundPlayer gameOverPlayer5 = new System.Media.SoundPlayer(Properties.Resources.gameOverMusic);
-								gameOverPlayer5.Play();
 								pictureBoxIA.Image = Properties.Resources.gameover2;
 								break;
 							case "Derecha":
 								DesactivarGramatica(grammarSniper);
-								System.Media.SoundPlayer soundPlayer3 = new System.Media.SoundPlayer(Properties.Resources.shotSound);
-								soundPlayer3.Play();
-								wait(1000);
-								System.Media.SoundPlayer player3 = new System.Media.SoundPlayer(Properties.Resources.IndianaJonesMusic);
-								player3.Play();
-
-								
 								pictureBoxIA.Image = Properties.Resources.indianaJonesASalvo;
-								wait(5000);
+								wait(3000);
 								pictureBoxIA.Image = Properties.Resources.IndianaJones;
 								wait(1000);
 								synth.Speak("Muy buen disparo!");
@@ -285,19 +249,12 @@ namespace REcoSample
 					}
 					break;
 				case 9:
-					System.Media.SoundPlayer shotPlayer = new System.Media.SoundPlayer(Properties.Resources.shotSound);
-					shotPlayer.Play();
 					synth.Speak("Por mucho que seas un viajero del tiempo no puedes matar a Chuck Norris, has perdido");
-					pictureBoxIA.Image = Properties.Resources.gameover2;
+					pictureBoxGameOver.Image = Properties.Resources.gameover;
 					pictureBoxGameOver.Enabled = true;
 					pictureBoxGameOver.Visible = true;
-					System.Media.SoundPlayer gameOverPlayer2 = new System.Media.SoundPlayer(Properties.Resources.gameOverMusic);
-					gameOverPlayer2.Play();
 					synth.Speak("Game over.");
-					wait(2000);
-					synth.Speak("Deseas reiniciar la partida?");
-
-					break; 
+				break; 
             }
 		}
 
@@ -378,7 +335,8 @@ namespace REcoSample
 			return grammar;
 		}
 
-        private Grammar CreateGrammarColors(params int[] info)
+
+		private Grammar CreateGrammarColors(params int[] info)
 			{
 				//synth.Speak("Creando ahora la gram�tica");
 				Choices colorChoice = new Choices();

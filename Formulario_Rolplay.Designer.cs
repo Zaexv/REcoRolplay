@@ -32,8 +32,6 @@ namespace REcoSample
             this.pictureBoxBabyYoda = new System.Windows.Forms.PictureBox();
             this.pictureBoxGameOver = new System.Windows.Forms.PictureBox();
             this.pictureBoxIA = new System.Windows.Forms.PictureBox();
-            this.nombreHintlbl = new System.Windows.Forms.Label();
-            this.hintArmaslbl = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBabyYoda)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGameOver)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIA)).BeginInit();
@@ -88,39 +86,11 @@ namespace REcoSample
             this.pictureBoxIA.TabIndex = 1;
             this.pictureBoxIA.TabStop = false;
             // 
-            // nombreHintlbl
-            // 
-            this.nombreHintlbl.AutoSize = true;
-            this.nombreHintlbl.BackColor = System.Drawing.Color.Transparent;
-            this.nombreHintlbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nombreHintlbl.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.nombreHintlbl.Location = new System.Drawing.Point(36, 575);
-            this.nombreHintlbl.Name = "nombreHintlbl";
-            this.nombreHintlbl.Size = new System.Drawing.Size(347, 25);
-            this.nombreHintlbl.TabIndex = 5;
-            this.nombreHintlbl.Text = "Hint: Mi nombre es/ Me llamo ____";
-            this.nombreHintlbl.Visible = false;
-            // 
-            // hintArmaslbl
-            // 
-            this.hintArmaslbl.AutoSize = true;
-            this.hintArmaslbl.BackColor = System.Drawing.Color.Transparent;
-            this.hintArmaslbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hintArmaslbl.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.hintArmaslbl.Location = new System.Drawing.Point(579, 617);
-            this.hintArmaslbl.Name = "hintArmaslbl";
-            this.hintArmaslbl.Size = new System.Drawing.Size(551, 25);
-            this.hintArmaslbl.TabIndex = 6;
-            this.hintArmaslbl.Text = "Hint: Seleccionar/ Escoger Blaster-Francotirador-Pistola";
-            this.hintArmaslbl.Visible = false;
-            // 
             // Formulario_Rolplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1283, 675);
-            this.Controls.Add(this.hintArmaslbl);
-            this.Controls.Add(this.nombreHintlbl);
             this.Controls.Add(this.pictureBoxBabyYoda);
             this.Controls.Add(this.pictureBoxGameOver);
             this.Controls.Add(this.pictureBoxIA);
@@ -143,8 +113,6 @@ namespace REcoSample
 		private System.Windows.Forms.PictureBox pictureBoxIA;
         private System.Windows.Forms.PictureBox pictureBoxGameOver;
         private System.Windows.Forms.PictureBox pictureBoxBabyYoda;
-        private System.Windows.Forms.Label nombreHintlbl;
-        private System.Windows.Forms.Label hintArmaslbl;
     }
 }
 
