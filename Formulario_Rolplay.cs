@@ -10,6 +10,17 @@ using System.Windows.Forms;
 using System.Speech.Recognition;
 using System.Speech.Synthesis;
 
+/*
+ * Codigo desarrollado por: 
+ * 
+ * Andrés González Rodríguez
+ * Eduardo Pertierra Puche
+ * 
+ * Desarrollo de Interfaces Multimodales - 2020
+ * DSIC - UPV
+ */
+
+
 namespace REcoSample
 {
 	public partial class Formulario_Rolplay : Form
@@ -19,7 +30,7 @@ namespace REcoSample
 		private SpeechSynthesizer synth = new SpeechSynthesizer();
 
 
-		//Variables privadas para usar en las funciones //
+		/* Variables privadas para usar en las funciones */
 		private Grammar grammarNombres, grammarYesNo, grammarWeapons, grammarShoot, grammarSniper;
 		private int state; //El estado del dialogo
 
@@ -72,7 +83,7 @@ namespace REcoSample
 			// Nivel de confianza del reconocimiento 60%
 			_recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 65);
 
-			//Activo la gram�ticas creadas previamente.
+			//Activo la gramaticas creadas previamente.
 			//ActivarGramatica(grammarNombres);
 			//ActivarGramatica(grammarColors);
 			ActivarGramatica(grammarYesNo);
@@ -84,13 +95,13 @@ namespace REcoSample
 			synth.Speak("Ahora cuentame; ¿Quieres participar en nuestra lucha?");
 		}
 
-		//Activa una gram�tica para ser usada
+		//Activa una gramatica para ser usada
 		private void ActivarGramatica(Grammar grammar)
 		{
 			grammar.Enabled = true;
 		}
 
-		//Desactiva una gram�tica para ser usada
+		//Desactiva una gramatica para ser usada
 		private void DesactivarGramatica(Grammar grammar)
         {
 			grammar.Enabled = false;
@@ -114,8 +125,8 @@ namespace REcoSample
 		void _recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
 
-			//obtenemos un diccionario con los elementos sem�nticos
-			//Definimos las variables internas a usar en la funci�n
+			//obtenemos un diccionario con los elementos semanticos
+			//Definimos las variables internas a usar en la funcion
 			SemanticValue semantics = e.Result.Semantics;
 			string rawText = e.Result.Text;
 			RecognitionResult result = e.Result;
@@ -134,7 +145,7 @@ namespace REcoSample
 							case "Si":
 								//Cambio el estado
 								this.state = 1;
-								//Desactivo la posibilidad de decir s� o no
+								//Desactivo la posibilidad de decir si o no
 								DesactivarGramatica(grammarYesNo);
 								synth.Speak("Ahora dime tu nombre");
 								//Activo la posibilidad de decir el nombre
@@ -300,7 +311,7 @@ namespace REcoSample
 			GrammarBuilder matar = "matar";
 			GrammarBuilder elegir = "elegir";
 			GrammarBuilder apuntar = "apuntar";
-			//Todo sería ideal que funcione la cadena vacía.
+
 			Choices cuatro_alternativas = new Choices(elegir, disparar, matar, apuntar);
 			GrammarBuilder frase = new GrammarBuilder(cuatro_alternativas);
 			frase.Append(shoot);
@@ -372,18 +383,14 @@ namespace REcoSample
 				SemanticResultKey choiceResultKey = new SemanticResultKey("nom", nameChoice);
 				GrammarBuilder nombres = new GrammarBuilder(choiceResultKey);
 
-
 				GrammarBuilder mi_nombre_es = "mi nombre es";
 				GrammarBuilder me_llamo = "me llamo";
-
 
 				Choices dos_alternativas = new Choices(mi_nombre_es, me_llamo);
 				GrammarBuilder frase = new GrammarBuilder(dos_alternativas);
 				frase.Append(nombres);
 				Grammar grammar = new Grammar(frase);
 				grammar.Name = "Poner/Cambiar Nombre";
-
-				//Grammar grammar = new Grammar("so.xml.txt");
 
 				return grammar;
 
