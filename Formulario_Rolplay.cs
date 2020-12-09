@@ -13,7 +13,7 @@ using System.Speech.Synthesis;
 /*
  * Codigo desarrollado por: 
  * 
- * Andrés González Rodríguez
+ * Andrés Rodríguez Sánchez
  * Eduardo Pertierra Puche
  * 
  * Desarrollo de Interfaces Multimodales - 2020
